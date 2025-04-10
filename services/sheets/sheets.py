@@ -1,3 +1,4 @@
+import os
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -5,7 +6,11 @@ class SheetHelper:
     def __init__(self, sheet_name: str):
         scopes = ["https://www.googleapis.com/auth/spreadsheets"]
         sheet_id = "1AkV0fknHWVy1DtIyA1UjZUVhrVGahSblZQfUu3EXZDo"
-        credentials_path: str = "credentials.json"
+
+        # Dynamically resolve the path to credentials.json
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        credentials_path = os.path.join(current_dir, "credentials.json")
+
         creds = Credentials.from_service_account_file(credentials_path, scopes=scopes)
         client = gspread.authorize(creds)
 

@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import os
 
 
-def get_keyzar_ring_price(url: str) -> str | None:
+def get_keyzar_ring_price(url: str) -> float | None:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     chromedriver_path = os.path.abspath(os.path.join(current_dir, "..", "chromedriver"))
 
@@ -22,20 +22,17 @@ def get_keyzar_ring_price(url: str) -> str | None:
         )
 
         if price_div:
-            price = price_div.text.strip()
-            print("💰 Price:", price)
-            return price
+            price_text = price_div.text.strip().replace("$", "").replace(",", "")
+            return float(price_text)
         else:
-            print("❌ Price div found but no text inside.")
             return None
 
     except Exception as e:
-        print("❌ Could not find the price div:", e)
         return None
 
     finally:
         driver.quit()
 
 
-url = "https://keyzarjewelry.com/products/the-ashley-setting-round-14k-white-gold-pave"
-get_keyzar_ring_price(url)
+# url = "https://keyzarjewelry.com/products/the-ashley-setting-round-14k-white-gold-pave"
+# get_keyzar_ring_price(url)

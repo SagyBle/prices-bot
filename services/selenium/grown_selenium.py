@@ -5,6 +5,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 import os
+import re
+
 
 
 def get_grown_bundle_price(url: str) -> str | None:
@@ -24,13 +26,15 @@ def get_grown_bundle_price(url: str) -> str | None:
         )
 
         if price_div and price_div.text:
-            print("💎 Price:", price_div.text)
-            return price_div.text
+            price_text = price_div.text.strip()
+            clean_price = re.sub(r"[^\d.]", "", price_text)
+
+
+            return float(clean_price) if clean_price else None
         else:
             return None
 
     except Exception as e:
-        print("❌ Could not find the price div:", e)
         return None
 
     finally:
